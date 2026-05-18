@@ -1,0 +1,37 @@
+<pre>--- Summary ---
+Tests passed: 0 out of 8
+
+--- Details ---
+Test #0: failed 
+Test case description: Wiki example 1
+FileNotFoundError: [Errno 2] No such file or directory: '../data/SPY.csv'
+
+Test #1: failed 
+Test case description: Wiki example 2
+FileNotFoundError: [Errno 2] No such file or directory: '../data/SPY.csv'
+
+Test #2: failed 
+Test case description: Wiki example 3: Six month range
+FileNotFoundError: [Errno 2] No such file or directory: '../data/SPY.csv'
+
+Test #3: failed 
+Test case description: Normalization check
+FileNotFoundError: [Errno 2] No such file or directory: '../data/SPY.csv'
+
+Test #4: failed 
+Test case description: One month range
+FileNotFoundError: [Errno 2] No such file or directory: '../data/SPY.csv'
+
+Test #5: failed 
+Test case description: Low Sharpe ratio
+FileNotFoundError: [Errno 2] No such file or directory: '../data/SPY.csv'
+
+Test #6: failed 
+Test case description: All your eggs in one basket
+FileNotFoundError: [Errno 2] No such file or directory: '../data/SPY.csv'
+
+Test #7: failed 
+Test case description: Two year range
+FileNotFoundError: [Errno 2] No such file or directory: '../data/SPY.csv'
+
+</pre>
