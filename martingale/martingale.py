@@ -75,23 +75,28 @@ def get_spin_result(win_prob):
 
     return result
 
-def strategy(win_prob, max_i, i, a):
-
+def strategy(win_prob, max_i, i, a, budget = 0, check_budget = False):
     episode_winnings = 0
     j = 1
     bet = 1
-    while episode_winnings < 80 and j < max_i:
+
+    while (episode_winnings < 80 and j < max_i) or (check_budget and budget>=0 and episode_winnings < 80 and j < max_i):
 
         if get_spin_result(win_prob):
             episode_winnings += bet
+            budget += bet
             bet = 1
         else:
             episode_winnings -= bet
+            budget -= bet
             bet *= 2
 
-        a[i, j] = episode_winnings
+        if check_budget and bet > budget:
+            bet = budget
 
+        a[i, j] = episode_winnings
         j+=1
+
 
     a[i, j:] = a[i, j - 1]
 
@@ -142,10 +147,34 @@ def exp1_figure3(a):
 
 
 def exp2_figure4(win_prob):
-    return
+    setup_plot()
+    a = np.zeros((1000, 1001))
+    for i in range(1000):
+        strategy(win_prob, 1000, i, a, budget= 256, check_budget=True)
 
-def exp2_figure5(win_prob):
-    return
+    gmean = a.mean(axis=0)
+    gstd = a.std(axis=0)
+
+    plt.title("Experiment 2, Figure 4")
+    plt.plot(gmean, label="Mean")
+    plt.plot(gmean+gstd, label="+Standard Deviation")
+    plt.plot(gmean-gstd, label="-Standard Deviation")
+    plt.legend()
+    plt.savefig("./images/figure4.png")
+
+    exp2_figure5(a)
+
+def exp2_figure5(a):
+    setup_plot()
+    gmedian = np.median(a=a, axis=0)
+    gstd = a.std(axis=0)
+
+    plt.title("Experiment 1, Figure 3")
+    plt.plot(gmedian, label="Median")
+    plt.plot(gmedian+gstd, label="+Standard Deviation")
+    plt.plot(gmedian-gstd, label="-Standard Deviation")
+    plt.legend()
+    plt.savefig("./images/figure5.png")
 
 def test_code():
     """
@@ -156,8 +185,7 @@ def test_code():
 
     exp1_figure1(win_prob)
     exp1_figure2(win_prob)
-    #exp2_figure4(win_prob)
-    #exp2_figure5(win_prob)
+    exp2_figure4(win_prob)
 
 if __name__ == "__main__":
     test_code()
