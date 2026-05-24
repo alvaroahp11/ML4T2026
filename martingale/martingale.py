@@ -169,7 +169,7 @@ def exp2_figure5(a):
     gmedian = np.median(a=a, axis=0)
     gstd = a.std(axis=0)
 
-    plt.title("Experiment 1, Figure 3")
+    plt.title("Experiment 2, Figure 5")
     plt.plot(gmedian, label="Median")
     plt.plot(gmedian+gstd, label="+Standard Deviation")
     plt.plot(gmedian-gstd, label="-Standard Deviation")
