@@ -1,9 +1,4 @@
 """"""
-from cProfile import label
-from turtledemo.chaos import plot
-
-from scipy.stats import gstd
-
 """Assess a betting strategy.
 
 Copyright 2018, Georgia Institute of Technology (Georgia Tech)
@@ -26,9 +21,9 @@ GT honor code violation.
 
 -----do not edit anything above this line---
 
-Student Name: Tucker Balch (replace with your name)
-GT User ID: tb34 (replace with your User ID)
-GT ID: 900897987 (replace with your GT ID)
+Student Name: Alvaro Andres Henriquez Perez
+GT User ID: aperez374 (replace with your User ID)
+GT ID: 904197062 (replace with your GT ID)
 """
 
 import numpy as np
@@ -80,7 +75,7 @@ def strategy(win_prob, max_i, i, a, budget = 0, check_budget = False):
     j = 1
     bet = 1
 
-    while (not check_budget and episode_winnings < 80 and j < max_i) or (check_budget and budget>0 and episode_winnings < 80 and j < max_i):
+    while (not check_budget and episode_winnings < 80 and j <= max_i) or (check_budget and budget>0 and episode_winnings < 80 and j <= max_i):
 
         if get_spin_result(win_prob):
             episode_winnings += bet
