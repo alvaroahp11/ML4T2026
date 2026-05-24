@@ -80,7 +80,7 @@ def strategy(win_prob, max_i, i, a, budget = 0, check_budget = False):
     j = 1
     bet = 1
 
-    while (episode_winnings < 80 and j < max_i) or (check_budget and budget>=0 and episode_winnings < 80 and j < max_i):
+    while (not check_budget and episode_winnings < 80 and j < max_i) or (check_budget and budget>0 and episode_winnings < 80 and j < max_i):
 
         if get_spin_result(win_prob):
             episode_winnings += bet
