@@ -22,8 +22,8 @@ GT honor code violation.
 -----do not edit anything above this line---
 
 Student Name: Alvaro Andres Henriquez Perez
-GT User ID: aperez374 (replace with your User ID)
-GT ID: 904197062 (replace with your GT ID)
+GT User ID: aperez374
+GT ID: 904197062
 """
 
 import numpy as np
