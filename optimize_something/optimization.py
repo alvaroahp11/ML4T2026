@@ -32,8 +32,10 @@ import datetime as dt
 import numpy as np
 
 import matplotlib.pyplot as plt
+import matplotlib.dates as mdates
 import pandas as pd
 from util import get_data, plot_data
+import scipy.optimize as spo
 
 def author():
     """
@@ -46,18 +48,59 @@ def study_group():
     return "aperez374"
 
 def fill_missing_data(df):
-    """Fill missing data in the DataFrame.
-
-    Note that this is not always the best way to fill missing data, but we will use it for testing purposes.
-
-    :param df: A DataFrame with missing data
-    :type df: pandas.DataFrame
-    :return: A DataFrame with missing data filled in
-    :rtype: pandas.DataFrame
-    """
     df.fillna(method="ffill", inplace=True)
     df.fillna(method="bfill", inplace=True)
     return df
+
+def normalized_data(df):
+    return df/df.iloc[0]
+
+def calculate_allocation(df):
+
+    n = df.shape[1]
+    guess = np.ones(n) / n
+    bounds = [(0.0, 1.0)] * n
+    constraints = ({'type': 'eq', 'fun': lambda a: np.sum(a) - 1.0},)
+
+    result = spo.minimize(f, guess, args=(df,), method='SLSQP',bounds=bounds, constraints=constraints)
+    return result.x
+
+def f(alloc, df):
+    df = df * alloc
+    df = df.sum(axis=1)
+    cr, adr, sddr, sr = calculate_statistic_metrics(df)
+    return sr*-1
+
+def plot_df(stocks, spy):
+    plt.plot(stocks, label="Portfolio", color="blue")
+    plt.plot(spy, label="SPY", color="green")
+    plt.legend()
+    plt.ylabel("Price")
+    plt.xlabel("Date")
+    plt.title("Daily Portfolio Value and SPY")
+    plt.grid(True, linestyle ="--")
+    ax = plt.gca()
+    ax.xaxis.set_major_locator(mdates.MonthLocator())
+    ax.xaxis.set_major_formatter(mdates.DateFormatter("%b %Y"))
+    plt.xticks(rotation=30, ha="right")
+    plt.tight_layout()
+    plt.subplots_adjust(bottom=0.2)
+    plt.savefig("./images/figure1.png")
+
+def calculate_statistic_metrics(df):
+    daily_return = (df[1:]/df[:-1].values) - 1
+    #cumulative return
+    cr = (df.iloc[-1]/df.iloc[0])-1
+    #average return
+    adr = daily_return.mean()
+    #standard deviation
+    sddr = daily_return.std()
+
+    #sharpe ratio
+    #the real calculation is square root of 252 (because our sample is daily it should 252, it could be weekly 52, or monthly 12) * mean(daily_return-daily_riskfree)/std(daily_return). the daily risk free its calculated root 256 of 1*%of the bank example 1*0.1
+
+    sr = (252**(1/2))*(adr/sddr)
+    return cr, adr, sddr, sr
 
 # This is the function that will be tested by the autograder
 # The student must update this code to properly implement the functionality
@@ -92,32 +135,30 @@ def optimize_portfolio(
     # Read in adjusted closing prices for given symbols, date range
     dates = pd.date_range(sd, ed)
     prices_all = get_data(syms, dates)  # automatically adds SPY
+
+    # ffill missing data
+    prices_all = fill_missing_data(prices_all)
+    # normalized data
+    prices_all = normalized_data(prices_all)
+
     prices = prices_all[syms]  # only portfolio symbols
     prices_SPY = prices_all["SPY"]  # only SPY, for comparison later
 
-    # ffill missing data
-    prices = fill_missing_data(prices)
-    #ffill missing data for SPY
-    prices_SPY = fill_missing_data(prices_SPY)
 
-    plt.plot(prices, label=prices.columns)
-    plt.legend(loc="upper left")
-    plt.savefig("./images/figure1.png")
+    #calculate allocation and the portfolio value
+    alloc = calculate_allocation(prices)
 
-    # Get daily portfolio value
-    port_val = prices_SPY  # add code here to compute daily portfolio values
-        
+    #calculate portfolio based on the allocations
+    prices = prices * alloc
+    prices = prices.sum(axis=1)
+
     # Compare daily portfolio value with SPY using a normalized plot
     if gen_plot:
-        # add code to plot here
-        df_temp = pd.concat(
-            [port_val, prices_SPY], keys=["Portfolio", "SPY"], axis=1
-        )
-        pass
+        plot_df(prices, prices_SPY)
 
-    allocs = np.asarray([0.2, 0.2, 0.3, 0.3])  # add code here to find the allocations
-    cr, adr, sddr, sr = [0.25,0.001,0.0005,2.1,]  # add code here to compute stats
-    return allocs, cr, adr, sddr, sr
+    #now that the graph is done, we need to calculate the statistics of the portfolio
+    cr, adr, sddr, sr = calculate_statistic_metrics(prices) # add code here to compute stats
+    return alloc, cr, adr, sddr, sr
 
 
 def test_code():
@@ -133,14 +174,14 @@ def test_code():
     allocations, cr, adr, sddr, sr = optimize_portfolio(sd=start_date, ed=end_date, syms=symbols, gen_plot=True)
 
     # Print statistics
-    print(f"Start Date: {start_date}")
-    print(f"End Date: {end_date}")
-    print(f"Symbols: {symbols}")
-    print(f"Allocations:{allocations}")
-    print(f"Sharpe Ratio: {sr}")
-    print(f"Volatility (stdev of daily returns): {sddr}")
-    print(f"Average Daily Return: {adr}")
-    print(f"Cumulative Return: {cr}")
+    #print(f"Start Date: {start_date}")
+    #print(f"End Date: {end_date}")
+    #print(f"Symbols: {symbols}")
+    #print(f"Allocations:{allocations}")
+    #print(f"Sharpe Ratio: {sr}")
+    #print(f"Volatility (stdev of daily returns): {sddr}")
+    #print(f"Average Daily Return: {adr}")
+    #print(f"Cumulative Return: {cr}")
 
 
 if __name__ == "__main__":
