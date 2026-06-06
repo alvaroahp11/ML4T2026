@@ -1,5 +1,5 @@
 class BagLearner:
-    def __init__(self, learner, kwargs, bags, verbose=False):
+    def __init__(self, learner, kwargs, bags, boost=False, verbose=False):
         self.learners = []
         for i in range(bags):
             self.learners.append(learner(**kwargs))
@@ -11,10 +11,9 @@ class BagLearner:
     def study_group(self):
         return "aperez374"
         
-
-    def addEvidence(self, dataX, dataY):
+    def add_evidence(self, dataX, dataY):
         for learner in self.learners:
-            learner.addEvidence(dataX, dataY)
+            learner.add_evidence(dataX, dataY)
 
     def query(self, points):
         predictions = []

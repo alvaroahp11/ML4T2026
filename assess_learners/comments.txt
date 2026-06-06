@@ -1,77 +1,71 @@
 <pre>--- Summary ---
-Tests passed: 0 out of 18
+Tests passed: 2 out of 18
 
 --- Details ---
 Test #0: failed 
 Description: Test Case 01: Deterministic Tree (group: DTLearner)
-ImportError: cannot import name 'DTLearner' from 'DTLearner' (/home/alvaroahp11/projects/ML4T2026/assess_learners/DTLearner.py)
+ValueError: all the input array dimensions for the concatenation axis must match exactly, but along dimension 1, the array at index 0 has size 1 and the array at index 1 has size 321
 
 Test #1: failed 
 Description: Test Case 02: Deterministic Tree (group: DTLearner)
-ImportError: cannot import name 'DTLearner' from 'DTLearner' (/home/alvaroahp11/projects/ML4T2026/assess_learners/DTLearner.py)
+ValueError: all the input array dimensions for the concatenation axis must match exactly, but along dimension 1, the array at index 0 has size 1 and the array at index 1 has size 321
 
 Test #2: failed 
 Description: Test Case 03: Deterministic Tree (group: DTLearner)
-ImportError: cannot import name 'DTLearner' from 'DTLearner' (/home/alvaroahp11/projects/ML4T2026/assess_learners/DTLearner.py)
+ValueError: all the input array dimensions for the concatenation axis must match exactly, but along dimension 1, the array at index 0 has size 1 and the array at index 1 has size 321
 
 Test #3: failed 
 Description: Test Case 04: Deterministic Tree (group: DTLearner)
-ImportError: cannot import name 'DTLearner' from 'DTLearner' (/home/alvaroahp11/projects/ML4T2026/assess_learners/DTLearner.py)
+ValueError: all the input array dimensions for the concatenation axis must match exactly, but along dimension 1, the array at index 0 has size 1 and the array at index 1 has size 321
 
 Test #4: failed 
 Description: Test Case 01: Random Tree (group: RTLearner)
-ImportError: cannot import name 'DTLearner' from 'DTLearner' (/home/alvaroahp11/projects/ML4T2026/assess_learners/DTLearner.py)
+ValueError: all the input array dimensions for the concatenation axis must match exactly, but along dimension 1, the array at index 0 has size 1 and the array at index 1 has size 321
 
 Test #5: failed 
 Description: Test Case 02: Random Tree (group: RTLearner)
-ImportError: cannot import name 'DTLearner' from 'DTLearner' (/home/alvaroahp11/projects/ML4T2026/assess_learners/DTLearner.py)
+ValueError: all the input array dimensions for the concatenation axis must match exactly, but along dimension 1, the array at index 0 has size 1 and the array at index 1 has size 321
 
 Test #6: failed 
 Description: Test Case 03: Random Tree (group: RTLearner)
-ImportError: cannot import name 'DTLearner' from 'DTLearner' (/home/alvaroahp11/projects/ML4T2026/assess_learners/DTLearner.py)
+ValueError: all the input array dimensions for the concatenation axis must match exactly, but along dimension 1, the array at index 0 has size 1 and the array at index 1 has size 321
 
 Test #7: failed 
 Description: Test Case 04: Random Tree (group: RTLearner)
-ImportError: cannot import name 'DTLearner' from 'DTLearner' (/home/alvaroahp11/projects/ML4T2026/assess_learners/DTLearner.py)
+ValueError: all the input array dimensions for the concatenation axis must match exactly, but along dimension 1, the array at index 0 has size 1 and the array at index 1 has size 321
 
 Test #8: failed 
 Description: Test Case 01: Bagging (group: BagLearner)
-ImportError: cannot import name 'DTLearner' from 'DTLearner' (/home/alvaroahp11/projects/ML4T2026/assess_learners/DTLearner.py)
+TypeError: unsupported operand type(s) for +: 'int' and 'NoneType'
 
 Test #9: failed 
 Description: Test Case 02: Bagging (group: BagLearner)
-ImportError: cannot import name 'DTLearner' from 'DTLearner' (/home/alvaroahp11/projects/ML4T2026/assess_learners/DTLearner.py)
+TypeError: unsupported operand type(s) for +: 'int' and 'NoneType'
 
 Test #10: failed 
 Description: Test Case 03: Bagging (group: BagLearner)
-ImportError: cannot import name 'DTLearner' from 'DTLearner' (/home/alvaroahp11/projects/ML4T2026/assess_learners/DTLearner.py)
+TypeError: unsupported operand type(s) for +: 'int' and 'NoneType'
 
 Test #11: failed 
 Description: Test Case 04: Bagging (group: BagLearner)
-ImportError: cannot import name 'DTLearner' from 'DTLearner' (/home/alvaroahp11/projects/ML4T2026/assess_learners/DTLearner.py)
+TypeError: unsupported operand type(s) for +: 'int' and 'NoneType'
 
 Test #12: failed 
 Description: Test Case 05: Bagging (group: BagLearner)
-ImportError: cannot import name 'DTLearner' from 'DTLearner' (/home/alvaroahp11/projects/ML4T2026/assess_learners/DTLearner.py)
+TypeError: unsupported operand type(s) for +: 'int' and 'NoneType'
 
 Test #13: failed 
 Description: Test Case 06: Bagging (group: BagLearner)
-ImportError: cannot import name 'DTLearner' from 'DTLearner' (/home/alvaroahp11/projects/ML4T2026/assess_learners/DTLearner.py)
+TypeError: unsupported operand type(s) for +: 'int' and 'NoneType'
 
 Test #14: failed 
 Description: Test Case 07: Bagging (group: BagLearner)
-ImportError: cannot import name 'DTLearner' from 'DTLearner' (/home/alvaroahp11/projects/ML4T2026/assess_learners/DTLearner.py)
+TypeError: unsupported operand type(s) for +: 'int' and 'NoneType'
 
 Test #15: failed 
 Description: Test Case 08: Bagging (group: BagLearner)
-ImportError: cannot import name 'DTLearner' from 'DTLearner' (/home/alvaroahp11/projects/ML4T2026/assess_learners/DTLearner.py)
+TypeError: unsupported operand type(s) for +: 'int' and 'NoneType'
 
-Test #16: failed 
-Description: InsaneLearner Test Case (group: InsaneLearner)
-ImportError: cannot import name 'DTLearner' from 'DTLearner' (/home/alvaroahp11/projects/ML4T2026/assess_learners/DTLearner.py)
-
-Test #17: failed 
-Description: Random Classname Test Case (group: RandomName)
-ImportError: cannot import name 'DTLearner' from 'DTLearner' (/home/alvaroahp11/projects/ML4T2026/assess_learners/DTLearner.py)
-
+Test #16: passed 
+Test #17: passed 
 </pre>

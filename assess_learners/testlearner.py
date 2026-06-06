@@ -29,6 +29,7 @@ import sys
 import numpy as np
 
 import LinRegLearner as lrl
+import InsaneLearner as il
 
 def gtid():
     """
@@ -38,6 +39,7 @@ def gtid():
     return 904197062  # replace with your GT ID number
 
 if __name__ == "__main__":
+
     if len(sys.argv) != 2:
         print("Usage: python testlearner.py <filename>")
         sys.exit(1)
@@ -85,5 +87,7 @@ if __name__ == "__main__":
     print(f"RMSE: {rmse}")
     c = np.corrcoef(pred_y, y=test_y)
     print(f"corr: {c[0,1]}")
+    
+
 
 
