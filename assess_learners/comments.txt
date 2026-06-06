@@ -1,71 +1,23 @@
 <pre>--- Summary ---
-Tests passed: 2 out of 18
+Tests passed: 18 out of 18
 
 --- Details ---
-Test #0: failed 
-Description: Test Case 01: Deterministic Tree (group: DTLearner)
-ValueError: all the input array dimensions for the concatenation axis must match exactly, but along dimension 1, the array at index 0 has size 1 and the array at index 1 has size 321
-
-Test #1: failed 
-Description: Test Case 02: Deterministic Tree (group: DTLearner)
-ValueError: all the input array dimensions for the concatenation axis must match exactly, but along dimension 1, the array at index 0 has size 1 and the array at index 1 has size 321
-
-Test #2: failed 
-Description: Test Case 03: Deterministic Tree (group: DTLearner)
-ValueError: all the input array dimensions for the concatenation axis must match exactly, but along dimension 1, the array at index 0 has size 1 and the array at index 1 has size 321
-
-Test #3: failed 
-Description: Test Case 04: Deterministic Tree (group: DTLearner)
-ValueError: all the input array dimensions for the concatenation axis must match exactly, but along dimension 1, the array at index 0 has size 1 and the array at index 1 has size 321
-
-Test #4: failed 
-Description: Test Case 01: Random Tree (group: RTLearner)
-ValueError: all the input array dimensions for the concatenation axis must match exactly, but along dimension 1, the array at index 0 has size 1 and the array at index 1 has size 321
-
-Test #5: failed 
-Description: Test Case 02: Random Tree (group: RTLearner)
-ValueError: all the input array dimensions for the concatenation axis must match exactly, but along dimension 1, the array at index 0 has size 1 and the array at index 1 has size 321
-
-Test #6: failed 
-Description: Test Case 03: Random Tree (group: RTLearner)
-ValueError: all the input array dimensions for the concatenation axis must match exactly, but along dimension 1, the array at index 0 has size 1 and the array at index 1 has size 321
-
-Test #7: failed 
-Description: Test Case 04: Random Tree (group: RTLearner)
-ValueError: all the input array dimensions for the concatenation axis must match exactly, but along dimension 1, the array at index 0 has size 1 and the array at index 1 has size 321
-
-Test #8: failed 
-Description: Test Case 01: Bagging (group: BagLearner)
-TypeError: unsupported operand type(s) for +: 'int' and 'NoneType'
-
-Test #9: failed 
-Description: Test Case 02: Bagging (group: BagLearner)
-TypeError: unsupported operand type(s) for +: 'int' and 'NoneType'
-
-Test #10: failed 
-Description: Test Case 03: Bagging (group: BagLearner)
-TypeError: unsupported operand type(s) for +: 'int' and 'NoneType'
-
-Test #11: failed 
-Description: Test Case 04: Bagging (group: BagLearner)
-TypeError: unsupported operand type(s) for +: 'int' and 'NoneType'
-
-Test #12: failed 
-Description: Test Case 05: Bagging (group: BagLearner)
-TypeError: unsupported operand type(s) for +: 'int' and 'NoneType'
-
-Test #13: failed 
-Description: Test Case 06: Bagging (group: BagLearner)
-TypeError: unsupported operand type(s) for +: 'int' and 'NoneType'
-
-Test #14: failed 
-Description: Test Case 07: Bagging (group: BagLearner)
-TypeError: unsupported operand type(s) for +: 'int' and 'NoneType'
-
-Test #15: failed 
-Description: Test Case 08: Bagging (group: BagLearner)
-TypeError: unsupported operand type(s) for +: 'int' and 'NoneType'
-
+Test #0: passed 
+Test #1: passed 
+Test #2: passed 
+Test #3: passed 
+Test #4: passed 
+Test #5: passed 
+Test #6: passed 
+Test #7: passed 
+Test #8: passed 
+Test #9: passed 
+Test #10: passed 
+Test #11: passed 
+Test #12: passed 
+Test #13: passed 
+Test #14: passed 
+Test #15: passed 
 Test #16: passed 
 Test #17: passed 
 </pre>

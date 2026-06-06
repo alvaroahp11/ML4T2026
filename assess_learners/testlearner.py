@@ -29,6 +29,9 @@ import sys
 import numpy as np
 
 import LinRegLearner as lrl
+import DTLearner as dt
+import RTLearner as rt
+import BagLearner as bl
 import InsaneLearner as il
 
 def gtid():
@@ -51,7 +54,6 @@ if __name__ == "__main__":
     if np.isnan(data[:, 0]).all():    # first column is dates
         data = data[:, 1:]
 
-
     # compute how much of the data is training and testing
     train_rows = int(0.6 * data.shape[0])
 
@@ -66,6 +68,8 @@ if __name__ == "__main__":
     test_x = data[test_indices, 0:-1]
     test_y = data[test_indices, -1]
 
+    
+    """
     # create a learner and train it
     learner = lrl.LinRegLearner(verbose=True)  # create a LinRegLearner
     learner.add_evidence(train_x, train_y)  # train it
@@ -87,6 +91,16 @@ if __name__ == "__main__":
     print(f"RMSE: {rmse}")
     c = np.corrcoef(pred_y, y=test_y)
     print(f"corr: {c[0,1]}")
+    """
+
+    tree1 = dt.DTLearner(verbose=True)
+    tree1.add_evidence(train_x, train_y)
+    result = tree1.query(test_x)
+    rmse = math.sqrt(((test_y - result) ** 2).sum() / test_y.shape[0])
+
+    print("DTLearner results")
+    print(f"RMSE: {rmse}")
+
     
 
 
