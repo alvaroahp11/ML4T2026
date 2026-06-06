@@ -1,0 +1,77 @@
+<pre>--- Summary ---
+Tests passed: 0 out of 18
+
+--- Details ---
+Test #0: failed 
+Description: Test Case 01: Deterministic Tree (group: DTLearner)
+ImportError: cannot import name 'DTLearner' from 'DTLearner' (/home/alvaroahp11/projects/ML4T2026/assess_learners/DTLearner.py)
+
+Test #1: failed 
+Description: Test Case 02: Deterministic Tree (group: DTLearner)
+ImportError: cannot import name 'DTLearner' from 'DTLearner' (/home/alvaroahp11/projects/ML4T2026/assess_learners/DTLearner.py)
+
+Test #2: failed 
+Description: Test Case 03: Deterministic Tree (group: DTLearner)
+ImportError: cannot import name 'DTLearner' from 'DTLearner' (/home/alvaroahp11/projects/ML4T2026/assess_learners/DTLearner.py)
+
+Test #3: failed 
+Description: Test Case 04: Deterministic Tree (group: DTLearner)
+ImportError: cannot import name 'DTLearner' from 'DTLearner' (/home/alvaroahp11/projects/ML4T2026/assess_learners/DTLearner.py)
+
+Test #4: failed 
+Description: Test Case 01: Random Tree (group: RTLearner)
+ImportError: cannot import name 'DTLearner' from 'DTLearner' (/home/alvaroahp11/projects/ML4T2026/assess_learners/DTLearner.py)
+
+Test #5: failed 
+Description: Test Case 02: Random Tree (group: RTLearner)
+ImportError: cannot import name 'DTLearner' from 'DTLearner' (/home/alvaroahp11/projects/ML4T2026/assess_learners/DTLearner.py)
+
+Test #6: failed 
+Description: Test Case 03: Random Tree (group: RTLearner)
+ImportError: cannot import name 'DTLearner' from 'DTLearner' (/home/alvaroahp11/projects/ML4T2026/assess_learners/DTLearner.py)
+
+Test #7: failed 
+Description: Test Case 04: Random Tree (group: RTLearner)
+ImportError: cannot import name 'DTLearner' from 'DTLearner' (/home/alvaroahp11/projects/ML4T2026/assess_learners/DTLearner.py)
+
+Test #8: failed 
+Description: Test Case 01: Bagging (group: BagLearner)
+ImportError: cannot import name 'DTLearner' from 'DTLearner' (/home/alvaroahp11/projects/ML4T2026/assess_learners/DTLearner.py)
+
+Test #9: failed 
+Description: Test Case 02: Bagging (group: BagLearner)
+ImportError: cannot import name 'DTLearner' from 'DTLearner' (/home/alvaroahp11/projects/ML4T2026/assess_learners/DTLearner.py)
+
+Test #10: failed 
+Description: Test Case 03: Bagging (group: BagLearner)
+ImportError: cannot import name 'DTLearner' from 'DTLearner' (/home/alvaroahp11/projects/ML4T2026/assess_learners/DTLearner.py)
+
+Test #11: failed 
+Description: Test Case 04: Bagging (group: BagLearner)
+ImportError: cannot import name 'DTLearner' from 'DTLearner' (/home/alvaroahp11/projects/ML4T2026/assess_learners/DTLearner.py)
+
+Test #12: failed 
+Description: Test Case 05: Bagging (group: BagLearner)
+ImportError: cannot import name 'DTLearner' from 'DTLearner' (/home/alvaroahp11/projects/ML4T2026/assess_learners/DTLearner.py)
+
+Test #13: failed 
+Description: Test Case 06: Bagging (group: BagLearner)
+ImportError: cannot import name 'DTLearner' from 'DTLearner' (/home/alvaroahp11/projects/ML4T2026/assess_learners/DTLearner.py)
+
+Test #14: failed 
+Description: Test Case 07: Bagging (group: BagLearner)
+ImportError: cannot import name 'DTLearner' from 'DTLearner' (/home/alvaroahp11/projects/ML4T2026/assess_learners/DTLearner.py)
+
+Test #15: failed 
+Description: Test Case 08: Bagging (group: BagLearner)
+ImportError: cannot import name 'DTLearner' from 'DTLearner' (/home/alvaroahp11/projects/ML4T2026/assess_learners/DTLearner.py)
+
+Test #16: failed 
+Description: InsaneLearner Test Case (group: InsaneLearner)
+ImportError: cannot import name 'DTLearner' from 'DTLearner' (/home/alvaroahp11/projects/ML4T2026/assess_learners/DTLearner.py)
+
+Test #17: failed 
+Description: Random Classname Test Case (group: RandomName)
+ImportError: cannot import name 'DTLearner' from 'DTLearner' (/home/alvaroahp11/projects/ML4T2026/assess_learners/DTLearner.py)
+
+</pre>

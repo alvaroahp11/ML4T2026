@@ -30,32 +30,43 @@ import numpy as np
 
 import LinRegLearner as lrl
 
+def gtid():
+    """
+    :return: The GT ID of the student
+    :rtype: int
+    """
+    return 904197062  # replace with your GT ID number
+
 if __name__ == "__main__":
     if len(sys.argv) != 2:
         print("Usage: python testlearner.py <filename>")
         sys.exit(1)
-    inf = open(sys.argv[1])
-    data = np.array(
-        [list(map(float, s.strip().split(","))) for s in inf.readlines()]
-    )
+
+    data = np.genfromtxt(sys.argv[1], delimiter=",")
+
+    if np.isnan(data[0]).all():       # first row is a header
+        data = data[1:, :]
+    if np.isnan(data[:, 0]).all():    # first column is dates
+        data = data[:, 1:]
+
 
     # compute how much of the data is training and testing
     train_rows = int(0.6 * data.shape[0])
-    test_rows = data.shape[0] - train_rows
+
+    np.random.seed(gtid())  
+    shuffled_indices = np.random.permutation(data.shape[0])
+    train_indices = shuffled_indices[:train_rows]
+    test_indices = shuffled_indices[train_rows:]
 
     # separate out training and testing data
-    train_x = data[:train_rows, 0:-1]
-    train_y = data[:train_rows, -1]
-    test_x = data[train_rows:, 0:-1]
-    test_y = data[train_rows:, -1]
-
-    print(f"{test_x.shape}")
-    print(f"{test_y.shape}")
+    train_x = data[train_indices, 0:-1]
+    train_y = data[train_indices, -1]
+    test_x = data[test_indices, 0:-1]
+    test_y = data[test_indices, -1]
 
     # create a learner and train it
     learner = lrl.LinRegLearner(verbose=True)  # create a LinRegLearner
     learner.add_evidence(train_x, train_y)  # train it
-    print(learner.author())
 
     # evaluate in sample
     pred_y = learner.query(train_x)  # get the predictions
@@ -74,3 +85,5 @@ if __name__ == "__main__":
     print(f"RMSE: {rmse}")
     c = np.corrcoef(pred_y, y=test_y)
     print(f"corr: {c[0,1]}")
+
+
