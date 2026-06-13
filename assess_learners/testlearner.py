@@ -27,6 +27,7 @@ import math
 import sys
 
 import numpy as np
+import matplotlib.pyplot as plt
 
 import LinRegLearner as lrl
 import DTLearner as dt
@@ -40,6 +41,67 @@ def gtid():
     :rtype: int
     """
     return 904197062  # replace with your GT ID number
+
+def evaluate_dt_leaf_sizes(train_x, train_y, test_x, test_y, max_leaf=75, savepath='./images/dt_learner_performance.png'):
+
+    result = np.zeros((2, max_leaf))
+    for i in range(1, max_leaf + 1):
+        learner = dt.DTLearner(leaf_size=i, verbose=False)
+        learner.add_evidence(train_x, train_y)
+        inSample = learner.query(train_x)
+        # calculate the error
+        rmse = math.sqrt(((inSample - train_y) ** 2).sum() / train_y.shape[0])
+        result[0, i-1] = rmse
+        outSample = learner.query(test_x)
+        rmse = math.sqrt(((outSample - test_y) ** 2).sum() / test_y.shape[0])
+        result[1, i-1] = rmse
+
+    leaf_sizes = range(1, max_leaf + 1)
+    plt.figure()
+    plt.plot(leaf_sizes, result[0, :], color='blue', label='In Sample')
+    plt.plot(leaf_sizes, result[1, :], color='red', label='Out of Sample')
+    plt.xlabel('Leaf Size')
+    plt.ylabel('RMSE')
+    plt.title('Decision Tree Learner Performance')
+    plt.legend()
+    plt.grid()
+    plt.savefig(savepath)
+    plt.close()
+    return result
+
+def evaluate_bag_leaf_sizes(train_x, train_y, test_x, test_y, num_bags=20, max_leaf=75, savepath='./images/bag_learner_performance.png'):
+
+    result = np.zeros((2, max_leaf))
+    for i in range(1, max_leaf + 1):
+        learner = bl.BagLearner(
+            learner=dt.DTLearner,
+            kwargs={"leaf_size": i},
+            bags=num_bags,
+            boost=False,
+            verbose=False
+        )
+        learner.add_evidence(train_x, train_y)
+
+        inSample = learner.query(train_x)
+        rmse = math.sqrt(((inSample - train_y) ** 2).sum() / train_y.shape[0])
+        result[0, i-1] = rmse
+
+        outSample = learner.query(test_x)
+        rmse = math.sqrt(((outSample - test_y) ** 2).sum() / test_y.shape[0])
+        result[1, i-1] = rmse
+
+    leaf_sizes = range(1, max_leaf + 1)
+    plt.figure()
+    plt.plot(leaf_sizes, result[0, :], color='blue', label='In Sample')
+    plt.plot(leaf_sizes, result[1, :], color='red', label='Out of Sample')
+    plt.xlabel('Leaf Size')
+    plt.ylabel('RMSE')
+    plt.title(f'BagLearner Performance ({num_bags} bags)')
+    plt.legend()
+    plt.grid()
+    plt.savefig(savepath)
+    plt.close()
+    return result
 
 if __name__ == "__main__":
 
@@ -67,41 +129,9 @@ if __name__ == "__main__":
     train_y = data[train_indices, -1]
     test_x = data[test_indices, 0:-1]
     test_y = data[test_indices, -1]
+    # run evaluation and save plot
 
-    
-    """
-    # create a learner and train it
-    learner = lrl.LinRegLearner(verbose=True)  # create a LinRegLearner
-    learner.add_evidence(train_x, train_y)  # train it
-
-    # evaluate in sample
-    pred_y = learner.query(train_x)  # get the predictions
-    rmse = math.sqrt(((train_y - pred_y) ** 2).sum() / train_y.shape[0])
-    print()
-    print("In sample results")
-    print(f"RMSE: {rmse}")
-    c = np.corrcoef(pred_y, y=train_y)
-    print(f"corr: {c[0,1]}")
-
-    # evaluate out of sample
-    pred_y = learner.query(test_x)  # get the predictions
-    rmse = math.sqrt(((test_y - pred_y) ** 2).sum() / test_y.shape[0])
-    print()
-    print("Out of sample results")
-    print(f"RMSE: {rmse}")
-    c = np.corrcoef(pred_y, y=test_y)
-    print(f"corr: {c[0,1]}")
-    """
-
-    tree1 = dt.DTLearner(verbose=True)
-    tree1.add_evidence(train_x, train_y)
-    result = tree1.query(test_x)
-    rmse = math.sqrt(((test_y - result) ** 2).sum() / test_y.shape[0])
-
-    print("DTLearner results")
-    print(f"RMSE: {rmse}")
-
-    
-
+    evaluate_dt_leaf_sizes(train_x, train_y, test_x, test_y)
+    evaluate_bag_leaf_sizes(train_x, train_y, test_x, test_y, num_bags=20)
 
 
