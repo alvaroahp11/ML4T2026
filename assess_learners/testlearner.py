@@ -25,6 +25,7 @@ GT honor code violation.
 
 import math
 import sys
+import time
 
 import numpy as np
 import matplotlib.pyplot as plt
@@ -103,6 +104,57 @@ def evaluate_bag_leaf_sizes(train_x, train_y, test_x, test_y, num_bags=20, max_l
     plt.close()
     return result
 
+def depth_from_node(tree, index):
+    if tree[index, 0] == -1:
+        return 0
+    left = index + int(tree[index, 2])
+    right = index + int(tree[index, 3])
+    return 1 + max(depth_from_node(tree, left), depth_from_node(tree, right))
+
+def evaluate_dt_vs_rt(train_x, train_y, max_leaf=75,
+                      savepath_depth='./images/depth_dt_rt.png',
+                      savepath_time='./images/time_dt_rt.png'):
+    dt_depths, rt_depths = [], []
+    dt_times, rt_times = [], []
+
+    for i in range(1, max_leaf + 1):
+        learner = dt.DTLearner(leaf_size=i, verbose=False)
+        start = time.time()
+        learner.add_evidence(train_x, train_y)
+        dt_times.append(time.time() - start)
+        dt_depths.append(depth_from_node(learner.tree, 0))
+
+        learner = rt.RTLearner(leaf_size=i, verbose=False)
+        start = time.time()
+        learner.add_evidence(train_x, train_y)
+        rt_times.append(time.time() - start)
+        rt_depths.append(depth_from_node(learner.tree, 0))
+
+    leaf_sizes = range(1, max_leaf + 1)
+
+    plt.close('all')
+    plt.figure()
+    plt.plot(leaf_sizes, dt_depths, color='blue', label='DTLearner')
+    plt.plot(leaf_sizes, rt_depths, color='red', label='RTLearner')
+    plt.xlabel('Leaf Size')
+    plt.ylabel('Tree Depth')
+    plt.title('DTLearner vs RTLearner: Tree Depth')
+    plt.legend()
+    plt.grid()
+    plt.savefig(savepath_depth)
+    plt.close()
+
+    plt.figure()
+    plt.plot(leaf_sizes, dt_times, color='blue', label='DTLearner')
+    plt.plot(leaf_sizes, rt_times, color='red', label='RTLearner')
+    plt.xlabel('Leaf Size')
+    plt.ylabel('Training Time (s)')
+    plt.title('DTLearner vs RTLearner: Training Time')
+    plt.legend()
+    plt.grid()
+    plt.savefig(savepath_time)
+    plt.close()
+
 if __name__ == "__main__":
 
     if len(sys.argv) != 2:
@@ -132,6 +184,7 @@ if __name__ == "__main__":
     # run evaluation and save plot
 
     evaluate_dt_leaf_sizes(train_x, train_y, test_x, test_y)
-    evaluate_bag_leaf_sizes(train_x, train_y, test_x, test_y, num_bags=20)
+    evaluate_bag_leaf_sizes(train_x, train_y, test_x, test_y, num_bags=20, max_leaf=75)
+    evaluate_dt_vs_rt(train_x, train_y, max_leaf=75)
 
 

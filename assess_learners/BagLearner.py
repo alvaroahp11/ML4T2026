@@ -1,3 +1,5 @@
+import numpy as np
+
 class BagLearner:
     def __init__(self, learner, kwargs, bags, boost=False, verbose=False):
         self.learners = []
@@ -13,7 +15,8 @@ class BagLearner:
         
     def add_evidence(self, dataX, dataY):
         for learner in self.learners:
-            learner.add_evidence(dataX, dataY)
+            indices = np.random.choice(dataX.shape[0], dataX.shape[0], replace=True)
+            learner.add_evidence(dataX[indices], dataY[indices])
 
     def query(self, points):
         predictions = []
