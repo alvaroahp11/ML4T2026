@@ -111,24 +111,27 @@ def depth_from_node(tree, index):
     right = index + int(tree[index, 3])
     return 1 + max(depth_from_node(tree, left), depth_from_node(tree, right))
 
-def evaluate_dt_vs_rt(train_x, train_y, max_leaf=75,
+def r_squared(y_true, y_pred):
+    ss_res = ((y_true - y_pred) ** 2).sum()
+    ss_tot = ((y_true - y_true.mean()) ** 2).sum()
+    return 1 - (ss_res / ss_tot)
+
+def evaluate_dt_vs_rt(train_x, train_y, test_x, test_y, max_leaf=75,
                       savepath_depth='./images/depth_dt_rt.png',
-                      savepath_time='./images/time_dt_rt.png'):
+                      savepath_r2='./images/r2_dt_rt.png'):
     dt_depths, rt_depths = [], []
-    dt_times, rt_times = [], []
+    dt_r2, rt_r2 = [], []
 
     for i in range(1, max_leaf + 1):
         learner = dt.DTLearner(leaf_size=i, verbose=False)
-        start = time.time()
         learner.add_evidence(train_x, train_y)
-        dt_times.append(time.time() - start)
         dt_depths.append(depth_from_node(learner.tree, 0))
+        dt_r2.append(r_squared(test_y, learner.query(test_x)))
 
         learner = rt.RTLearner(leaf_size=i, verbose=False)
-        start = time.time()
         learner.add_evidence(train_x, train_y)
-        rt_times.append(time.time() - start)
         rt_depths.append(depth_from_node(learner.tree, 0))
+        rt_r2.append(r_squared(test_y, learner.query(test_x)))
 
     leaf_sizes = range(1, max_leaf + 1)
 
@@ -145,15 +148,16 @@ def evaluate_dt_vs_rt(train_x, train_y, max_leaf=75,
     plt.close()
 
     plt.figure()
-    plt.plot(leaf_sizes, dt_times, color='blue', label='DTLearner')
-    plt.plot(leaf_sizes, rt_times, color='red', label='RTLearner')
+    plt.plot(leaf_sizes, dt_r2, color='blue', label='DTLearner')
+    plt.plot(leaf_sizes, rt_r2, color='red', label='RTLearner')
     plt.xlabel('Leaf Size')
-    plt.ylabel('Training Time (s)')
-    plt.title('DTLearner vs RTLearner: Training Time')
+    plt.ylabel('R-Squared')
+    plt.title('DTLearner vs RTLearner: R-Squared (Out of Sample)')
     plt.legend()
     plt.grid()
-    plt.savefig(savepath_time)
+    plt.savefig(savepath_r2)
     plt.close()
+
 
 if __name__ == "__main__":
 
@@ -184,7 +188,7 @@ if __name__ == "__main__":
     # run evaluation and save plot
 
     evaluate_dt_leaf_sizes(train_x, train_y, test_x, test_y)
-    evaluate_bag_leaf_sizes(train_x, train_y, test_x, test_y, num_bags=20, max_leaf=75)
-    evaluate_dt_vs_rt(train_x, train_y, max_leaf=75)
+    evaluate_bag_leaf_sizes(train_x, train_y, test_x, test_y, num_bags=20)
+    evaluate_dt_vs_rt(train_x, train_y, test_x, test_y)
 
 
