@@ -45,53 +45,61 @@ class DTLearner(object):
     """
 
     def __init__(self, leaf_size=1, verbose=False):
-        """
-        Constructor method
-        """
-        warnings.warn(
-            "\n\n  WARNING! THIS IS NOT A CORRECT DTLearner IMPLEMENTATION!"
-            " REPLACE WITH YOUR OWN CODE\n"
-        )
-        pass  # move along, these aren't the drones you're looking for
+        self.leaf_size = leaf_size
+        self.verbose = verbose
+        self.tree = np.array([])
 
     def author(self):
-        """
-        :return: The GT username of the student
-        :rtype: str
-        """
-        return "tb34"  # replace tb34 with your Georgia Tech username
+        return "aperez374"
+
+    def study_group(self):
+        return "aperez374"
 
     def add_evidence(self, data_x, data_y):
-        """
-        Add training data to learner
+        self.tree = self.build_tree(data_x, data_y)
 
-        :param data_x: A set of feature values used to train the learner
-        :type data_x: numpy.ndarray
-        :param data_y: The value we are attempting to predict given the X data
-        :type data_y: numpy.ndarray
-        """
+    def build_tree(self, data_x, data_y):
+        if len(data_x) <= self.leaf_size:
+            return np.array([[-1, np.mean(data_y), np.nan, np.nan]])
 
-        # slap on 1s column so linear regression finds a constant term
-        new_data_x = np.ones([data_x.shape[0], data_x.shape[1] + 1])
-        new_data_x[:, 0 : data_x.shape[1]] = data_x
+        elif np.all(data_y == data_y[0]):
+            return np.array([[-1, data_y[0], np.nan, np.nan]])
 
-        # build and save the model
-        self.model_coefs, residuals, rank, s = np.linalg.lstsq(
-            new_data_x, data_y, rcond=None
-        )
+        correlations = np.zeros(data_x.shape[1])
+        for i in range(data_x.shape[1]):
+            if np.std(data_x[:, i]) > 0:
+                correlations[i] = np.corrcoef(data_x[:, i], data_y)[0, 1]
+
+        correlations = np.nan_to_num(correlations)
+
+        best_feature = np.argmax(np.abs(correlations))
+        best_value = np.median(data_x[:, best_feature])
+
+        left_indices = data_x[:, best_feature] <= best_value
+        right_indices = data_x[:, best_feature] > best_value
+
+        if left_indices.sum() == 0 or right_indices.sum() == 0:
+            return np.array([[-1, np.mean(data_y), np.nan, np.nan]])
+
+        left_tree = self.build_tree(data_x[left_indices], data_y[left_indices])
+        right_tree = self.build_tree(data_x[right_indices], data_y[right_indices])
+
+        root = np.array([[best_feature, best_value, 1, left_tree.shape[0] + 1]])
+        return np.vstack((root, left_tree, right_tree))
 
     def query(self, points):
-        """
-        Estimate a set of test points given the model we built.
-
-        :param points: A numpy array with each row corresponding to a specific query.
-        :type points: numpy.ndarray
-        :return: The predicted result of the input data according to the trained model
-        :rtype: numpy.ndarray
-        """
-        return (self.model_coefs[:-1] * points).sum(axis=1) + self.model_coefs[
-            -1
-        ]
+        results = []
+        for point in points:
+            node_index = 0
+            while self.tree[node_index, 0] != -1:
+                feature = int(self.tree[node_index, 0])
+                value = self.tree[node_index, 1]
+                if point[feature] <= value:
+                    node_index += int(self.tree[node_index, 2])
+                else:
+                    node_index += int(self.tree[node_index, 3])
+            results.append(self.tree[node_index, 1])
+        return np.array(results)
 
 
 if __name__ == "__main__":

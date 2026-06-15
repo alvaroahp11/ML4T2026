@@ -45,8 +45,10 @@ def best_4_lin_reg(seed=1489683273):
     :rtype: numpy.ndarray
     """
     np.random.seed(seed)
-    x = np.zeros((100, 2))
-    y = np.random.random(size=(100,)) * 200 - 100
+    N, D = 800, 8
+    x = np.random.normal(size=(N,D))
+    w = np.random.normal(size=D)
+    y = x @ w + 0.1 * np.random.normal(size=N)
     # Here's is an example of creating a Y from randomly generated
     # X with multiple columns
     # y = x[:,0] + np.sin(x[:,1]) + x[:,2]**2 + x[:,3]**3
@@ -65,8 +67,9 @@ def best_4_dt(seed=1489683273):
     :rtype: numpy.ndarray
     """
     np.random.seed(seed)
-    x = np.zeros((100, 2))
-    y = np.random.random(size=(100,)) * 200 - 100
+    x = np.random.uniform(0, 1, size=(800, 2))
+    y = ((x[:, 0] > 0.5) ^ (x[:, 1] > 0.5)).astype(float)
+
     return x, y
 
 
@@ -75,7 +78,10 @@ def author():
     :return: The GT username of the student
     :rtype: str
     """
-    return "tb34"  # Change this to your user ID
+    return "aperez374"  # Change this to your user ID
+
+def study_group(self):
+    return "aperez374"
 
 
 if __name__ == "__main__":
