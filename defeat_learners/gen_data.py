@@ -26,8 +26,6 @@ GT User ID: tb34 (replace with your User ID)
 GT ID: 900897987 (replace with your GT ID)
 """
 
-import math
-
 import numpy as np
 
 
@@ -45,7 +43,7 @@ def best_4_lin_reg(seed=1489683273):
     :rtype: numpy.ndarray
     """
     np.random.seed(seed)
-    N, D = 800, 8
+    N, D = 900, 9
     x = np.random.normal(size=(N,D))
     w = np.random.normal(size=D)
     y = x @ w + 0.1 * np.random.normal(size=N)
@@ -67,7 +65,7 @@ def best_4_dt(seed=1489683273):
     :rtype: numpy.ndarray
     """
     np.random.seed(seed)
-    x = np.random.uniform(0, 1, size=(800, 2))
+    x = np.random.uniform(0, 1, size=(900, 2))
     y = ((x[:, 0] > 0.5) ^ (x[:, 1] > 0.5)).astype(float)
 
     return x, y

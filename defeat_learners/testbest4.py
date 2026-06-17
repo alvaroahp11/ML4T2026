@@ -47,6 +47,8 @@ def compare_os_rmse(learner1, learner2, x, y):
     :return: The root mean squared error of each learner
     :rtype: tuple
     """
+    
+
     # compute how much of the data is training and testing
     train_rows = int(math.floor(0.6 * x.shape[0]))
     test_rows = x.shape[0] - train_rows
@@ -74,48 +76,51 @@ def compare_os_rmse(learner1, learner2, x, y):
     return rmse1, rmse2
 
 
-def test_code():
+def test_code(i):
     """
     Performs a test of your code and prints the results
     """
     # create two learners and get data
     lrlearner = lrl.LinRegLearner(verbose=False)
     dtlearner = dt.DTLearner(verbose=False, leaf_size=1)
-    x, y = best_4_lin_reg()
+    x, y = best_4_lin_reg(i)
 
     # compare the two learners
     rmse_lr, rmse_dt = compare_os_rmse(lrlearner, dtlearner, x, y)
 
     # share results
-    print()
-    print("best_4_lin_reg() results")
-    print(f"RMSE LR    : {rmse_lr}")
-    print(f"RMSE DT    : {rmse_dt}")
+    #print()
+    #print("best_4_lin_reg() results")
+    #print(f"RMSE LR    : {rmse_lr}")
+    #print(f"RMSE DT    : {rmse_dt}")
     if rmse_lr < 0.9 * rmse_dt:
-        print("LR < 0.9 DT:  pass")
+        #print("LR < 0.9 DT:  pass")
+        pass
     else:
         print("LR >= 0.9 DT:  fail")
-    print()
+    #print()
 
     # get data that is best for a random tree
     lrlearner = lrl.LinRegLearner(verbose=False)
     dtlearner = dt.DTLearner(verbose=False, leaf_size=1)
-    x, y = best_4_dt()
+    x, y = best_4_dt(i)
 
     # compare the two learners
     rmse_lr, rmse_dt = compare_os_rmse(lrlearner, dtlearner, x, y)
 
     # share results
-    print()
-    print("best_4_dt() results")
-    print(f"RMSE LR    : {rmse_lr}")
-    print(f"RMSE DT    : {rmse_dt}")
+    #print()
+    #print("best_4_dt() results")
+    #print(f"RMSE LR    : {rmse_lr}")
+    #print(f"RMSE DT    : {rmse_dt}")
     if rmse_dt < 0.9 * rmse_lr:
-        print("DT < 0.9 LR:  pass")
+        #print("DT < 0.9 LR:  pass")
+        pass
     else:
         print("DT >= 0.9 LR:  fail")
-    print()
+    #print()
 
 
 if __name__ == "__main__":
-    test_code()
+    for i in range (1000):
+        test_code(i)
