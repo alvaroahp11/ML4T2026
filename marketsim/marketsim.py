@@ -22,17 +22,23 @@ GT honor code violation.
 -----do not edit anything above this line---
 
 Student Name: Tucker Balch (replace with your name)
-GT User ID: tb34 (replace with your User ID)
-GT ID: 900897987 (replace with your GT ID)
+GT User ID: aperez374 (replace with your User ID)
+GT ID: 904197062 (replace with your GT ID)
 """
 
 import datetime as dt
 import os
 
 import numpy as np
-
 import pandas as pd
+
 from util import get_data, plot_data
+
+def author():
+    return "aperez374"  
+
+def study_group():
+    return "aperez374"  
 
 
 def compute_portvals(
@@ -60,16 +66,72 @@ def compute_portvals(
     # code should work correctly with either input
     # TODO: Your code here
 
+    #Read in the orders file
+
+    orders = pd.read_csv(orders_file, index_col='Date', parse_dates=True, na_values=['nan'])
+    orders = orders.sort_index()
+    
+    symbols = orders['Symbol'].unique().tolist()
+
     # In the template, instead of computing the value of the portfolio, we just
     # read in the value of IBM over 6 months
-    start_date = dt.datetime(2008, 1, 1)
-    end_date = dt.datetime(2008, 6, 1)
-    portvals = get_data(["IBM"], pd.date_range(start_date, end_date))
-    portvals = portvals[["IBM"]]  # remove SPY
-    rv = pd.DataFrame(index=portvals.index, data=portvals.values)
+    start_date = orders.index.min()
+    end_date = orders.index.max()
+    portvals = get_data(symbols, pd.date_range(start_date, end_date))
 
-    return rv
-    return portvals
+    #fill missing data
+    portvals = portvals.ffill().bfill()
+
+    #remove days with no trading
+    trading_days = portvals.index
+    orders = orders[orders.index.isin(trading_days)]
+
+    portvals = portvals[symbols]  # remove SPY
+    #rv = pd.DataFrame(index=portvals.index, data=portvals.values)
+    portvals["Cash"] = 1
+    
+
+    #create the trades dataframe
+    trades = portvals.copy(deep=True)
+    trades[:] = 0
+
+    for date, row in orders.iterrows():
+        symbol = row['Symbol']
+        order = row['Order']
+        shares = row['Shares']
+        stock_value = portvals.at[date,symbol]
+
+        if order == "BUY":
+            trades.at[date,symbol]+= shares
+            trades.at[date,'Cash']+=stock_value*shares*-1
+            trades.at[date, 'Cash'] += -commission - impact * stock_value * shares
+        else:
+            trades.at[date,symbol] += shares*-1
+            trades.at[date,'Cash']+=stock_value*shares
+            trades.at[date, 'Cash'] += -commission - impact * stock_value * shares
+        
+
+    holdings = trades.copy()
+    holdings.at[holdings.index[0], 'Cash'] += start_val
+    holdings = holdings.cumsum()
+    values = (holdings * portvals).sum(axis=1).to_frame('portval')
+    return values
+
+def calculate_statistic_metrics(df):
+    df = df/df.iloc[0]
+    daily_return = (df[1:]/df[:-1].values) - 1
+    #cumulative return
+    cr = (df.iloc[-1]/df.iloc[0])-1
+    #average return
+    adr = daily_return.mean()
+    #standard deviation
+    sddr = daily_return.std()
+
+    #sharpe ratio
+    #the real calculation is square root of 252 (because our sample is daily it should 252, it could be weekly 52, or monthly 12) * mean(daily_return-daily_riskfree)/std(daily_return). the daily risk free its calculated root 256 of 1*%of the bank example 1*0.1
+
+    sr = (252**(1/2))*(adr/sddr)
+    return cr, adr, sddr, sr
 
 
 def test_code():
@@ -80,7 +142,7 @@ def test_code():
     # note that during autograding his function will not be called.
     # Define input parameters
 
-    of = "./orders/orders2.csv"
+    of = "./orders/orders-01.csv"
     sv = 1000000
 
     # Process orders
@@ -92,21 +154,14 @@ def test_code():
 
     # Get portfolio stats
     # Here we just fake the data. you should use your code from previous assignments.
-    start_date = dt.datetime(2008, 1, 1)
-    end_date = dt.datetime(2008, 6, 1)
-    cum_ret, avg_daily_ret, std_daily_ret, sharpe_ratio = [
-        0.2,
-        0.01,
-        0.02,
-        1.5,
-    ]
-    cum_ret_SPY, avg_daily_ret_SPY, std_daily_ret_SPY, sharpe_ratio_SPY = [
-        0.2,
-        0.01,
-        0.02,
-        1.5,
-    ]
-
+    start_date = portvals.index.min()
+    end_date = portvals.index.max()
+    cum_ret, avg_daily_ret, std_daily_ret, sharpe_ratio = calculate_statistic_metrics(portvals)
+    #SPY
+    spy = get_data(["SPY"], pd.date_range(start_date, end_date))["SPY"]
+    spy = spy.ffill().bfill()
+    spy.to_csv("spy.csv")
+    cum_ret_SPY, avg_daily_ret_SPY, std_daily_ret_SPY, sharpe_ratio_SPY = calculate_statistic_metrics(spy)
     # Compare portfolio against $SPX
     print(f"Date Range: {start_date} to {end_date}")
     print()
