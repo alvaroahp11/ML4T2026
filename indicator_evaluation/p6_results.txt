@@ -1,0 +1,4 @@
+Optimal Portfolio: Cumulative Return: 5.7861
+Average Daily Return: 0.0038167861508578214
+Standard Deviation of Daily Returns: 0.004547823197907996
+Sharpe Ratio: 13.322769848217233
