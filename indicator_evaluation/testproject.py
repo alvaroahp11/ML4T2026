@@ -278,10 +278,13 @@ if __name__ == "__main__":
 
     #save port statistics
     cr, adr, sddr, sr = calculate_statistic_metrics(jpm_portvals)
-    output = f"Optimal Portfolio: Cumulative Return: {cr}\nAverage Daily Return: {adr}\nStandard Deviation of Daily Returns: {sddr}\nSharpe Ratio: {sr}"
-    
+    sr_cr, sr_adr, sr_sddr, sr_sr = calculate_statistic_metrics(benchmark_portvals)
+    output = f"Optimal Portfolio: Cumulative Return: {cr:.6f}\nAverage Daily Return: {adr:.6f}\nStandard Deviation of Daily Returns: {sddr:.6f}\nSharpe Ratio: {sr:.6f}"
+    benchmark_output = f"Benchmark: Cumulative Return: {sr_cr:.6f}\nAverage Daily Return: {sr_adr:.6f}\nStandard Deviation of Daily Returns: {sr_sddr:.6f}\nSharpe Ratio: {sr_sr:.6f}"
+
     with open("p6_results.txt", "w") as f:
         f.write(output + "\n")
+        f.write(benchmark_output + "\n")
 
     #indicators
     plot_bollinger_bands(symbol="JPM", sd=dt.datetime(2008, 1, 1), ed=dt.datetime(2009,12,31), window=20, num_std_dev=2, outdir="./images")
