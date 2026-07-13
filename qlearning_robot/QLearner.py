@@ -126,9 +126,7 @@ class QLearner(object):
                 s_prime_rand = self.model_t[(s_rand, a_rand)]
                 r_rand = self.model_r[(s_rand, a_rand)]
 
-                self.q_table[s_rand, a_rand] += self.alpha * (
-                    r_rand + self.gamma * np.max(self.q_table[s_prime_rand]) - self.q_table[s_rand, a_rand]
-                )
+                self.q_table[s_rand, a_rand] += self.alpha * (r_rand + self.gamma * np.max(self.q_table[s_prime_rand]) - self.q_table[s_rand, a_rand])
 
         if self.rar > rand.random():
             action = rand.randint(0, self.num_actions - 1)
