@@ -1,0 +1,24 @@
+Manual Strategy - In Sample: 
+Cumulative Return: 0.291908
+Average Daily Return: 0.000596
+Standard Deviation of Daily Returns: 0.013302
+Sharpe Ratio: 0.711778
+
+Benchmark - In Sample:
+Cumulative Return: 0.012325
+Average Daily Return: 0.000169
+Standard Deviation of Daily Returns: 0.017041
+Sharpe Ratio: 0.157205
+
+Manual Strategy - Out of Sample: 
+Cumulative Return: 0.161381
+Average Daily Return: 0.000326
+Standard Deviation of Daily Returns: 0.007520
+Sharpe Ratio: 0.687465
+
+Benchmark - Out of Sample: 
+Cumulative Return: -0.083579
+Average Daily Return: -0.000137
+Standard Deviation of Daily Returns: 0.008500
+Sharpe Ratio: -0.256657
+
