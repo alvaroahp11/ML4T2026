@@ -36,17 +36,19 @@ def plot_strategy_chart(portvals, benchmark, trades, title):
     ax.plot(portvals_norm.index, portvals_norm.values, label="Manual Strategy", color="red", linewidth=2)
     ax.plot(benchmark_norm.index, benchmark_norm.values, label="Benchmark", color="purple", linewidth=2)
 
-    for d in long_dates:
-        ax.axvline(d, color="blue", linestyle="--", alpha=0.7, linewidth=1)
-    for d in short_dates:
-        ax.axvline(d, color="black", linestyle="--", alpha=0.7, linewidth=1)
+    for i, d in enumerate(long_dates):
+        ax.axvline(d, color="blue", linestyle="--", alpha=0.7, linewidth=1,
+                label="Long Entry" if i == 0 else None)
+
+    for i, d in enumerate(short_dates):
+        ax.axvline(d, color="black", linestyle="--", alpha=0.7, linewidth=1,
+                label="Short Entry" if i == 0 else None)
 
     ax.set_title(title)
     ax.set_xlabel("Date")
     ax.set_ylabel("Normalized Value")
     ax.legend(loc="best")
     ax.grid(True)
-    fig.autofmt_xdate()
     fig.tight_layout()
 
     os.makedirs("./images", exist_ok=True)
@@ -77,7 +79,7 @@ def manual_strategy():
     output_os = f"Manual Strategy - Out of Sample: \nCumulative Return: {cr_os:.6f}\nAverage Daily Return: {adr_os:.6f}\nStandard Deviation of Daily Returns: {sddr_os:.6f}\nSharpe Ratio: {sr_os:.6f}"
     benchmark_output_os = f"Benchmark - Out of Sample: \nCumulative Return: {sr_cr_os:.6f}\nAverage Daily Return: {sr_adr_os:.6f}\nStandard Deviation of Daily Returns: {sr_sddr_os:.6f}\nSharpe Ratio: {sr_sr_os:.6f}"
 
-    with open("p8_results.txt", "w") as f:
+    with open("p8_manual_results.txt", "w") as f:
         f.write(output + "\n"+ "\n")
         f.write(benchmark_output + "\n"+ "\n")
         f.write(output_os+"\n"+ "\n")

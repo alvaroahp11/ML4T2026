@@ -1,151 +1,98 @@
 import datetime as dt
+import os
+
+import matplotlib
 import matplotlib.pyplot as plt
 import pandas as pd
 
-import ManualStrategy as ms
+import ManualStrategy as ms_strategy
 import StrategyLearner as sl
 import marketsimcode as msc
+import indicators as ind
 
 
 def author():
-    return "aperez374"  # replace with your GT Canvas ID
+    return "aperez374"
 
 
 def study_group():
-    return "aperez374"  # if you are in a study group
+    return "aperez374"
 
 
-def run_benchmark(symbol, sd, ed, sv=100000, commission=9.95, impact=0.005):
-    """Create trades for benchmark: buy 1000 shares on first day and hold."""
-    dates = pd.date_range(sd, ed)
-    trades = pd.DataFrame(index=dates, columns=[symbol])
-    trades.values[:, :] = 0.0
-    first_day = trades.index[0]
-    trades.loc[first_day, symbol] = 1000.0
-    portvals = msc.compute_portvals(
-        trades, symbol, start_val=sv, commission=commission, impact=impact
-    )
-    return portvals
+def _benchmark_portvals(symbol, sd, ed, sv, commission, impact):
+    idx = ind.bollinger_bands_indicator(symbol, sd, ed).index
+    trades = pd.Series(0.0, index=idx)
+    trades.iloc[0] = 1000.0
+    return msc.compute_portvals(trades.to_frame(symbol), symbol, sv, commission, impact)
 
 
-def normalize(series):
+def _normalize(portvals):
+    series = portvals.squeeze()
     return series / series.iloc[0]
 
 
-def summarize(name, portvals):
-    portvals = portvals.squeeze()
-    daily_rets = portvals.pct_change().dropna()
-    cr = portvals.iloc[-1] / portvals.iloc[0] - 1
-    adr = daily_rets.mean()
-    sddr = daily_rets.std()
-
-    print(f"{name} results:")
-    print(f"  Cumulative return: {cr:.4f}")
-    print(f"  Mean daily return: {adr:.6f}")
-    print(f"  Std of daily return: {sddr:.6f}")
-    print()
-
-
-def main():
-    symbol = "JPM"
-    sv = 100000
-
-    # in sample and out of sample dates
-    sd_in = dt.datetime(2008, 1, 1)
-    ed_in = dt.datetime(2009, 12, 31)
-
-    sd_out = dt.datetime(2010, 1, 1)
-    ed_out = dt.datetime(2011, 12, 31)
-
-    # ManualStrategy instance
-    manual = ms.ManualStrategy(verbose=False)
-
-    # StrategyLearner instance
-    learner = sl.StrategyLearner(verbose=False, impact=0.005, commission=0.0)
-
-    # train learner in sample
-    learner.add_evidence(symbol=symbol, sd=sd_in, ed=ed_in, sv=sv)
-
-    # experiment settings
-    commission = 9.95
-    impact = 0.005
-
-    # IN SAMPLE RUNS
-    trades_manual_in = manual.testPolicy(symbol=symbol, sd=sd_in, ed=ed_in, sv=sv)
-    portvals_manual_in = msc.compute_portvals(
-        trades_manual_in, symbol, start_val=sv, commission=commission, impact=impact
-    )
-
-    trades_learner_in = learner.testPolicy(symbol=symbol, sd=sd_in, ed=ed_in, sv=sv)
-    portvals_learner_in = msc.compute_portvals(
-        trades_learner_in, symbol, start_val=sv, commission=commission, impact=impact
-    )
-
-    portvals_bench_in = run_benchmark(
-        symbol, sd_in, ed_in, sv=sv, commission=commission, impact=impact
-    )
-
-    # summarize in sample
-    summarize("In sample Benchmark", portvals_bench_in)
-    summarize("In sample ManualStrategy", portvals_manual_in)
-    summarize("In sample StrategyLearner", portvals_learner_in)
-
-    # plot in sample
-    plt.figure(figsize=(10, 6))
-    norm_bench_in = normalize(portvals_bench_in)
-    norm_manual_in = normalize(portvals_manual_in)
-    norm_learner_in = normalize(portvals_learner_in)
-
-    plt.plot(norm_bench_in.index, norm_bench_in.values, color="purple", label="Benchmark")
-    plt.plot(norm_manual_in.index, norm_manual_in.values, color="red", label="ManualStrategy")
-    plt.plot(norm_learner_in.index, norm_learner_in.values, color="blue", label="StrategyLearner")
-
-    plt.title("In sample JPM portfolio values")
-    plt.xlabel("Date")
-    plt.ylabel("Normalized value")
-    plt.legend()
-    plt.grid(True)
-    plt.savefig("./images/experiment1_in_sample.png", dpi=150)
-
-    # OUT OF SAMPLE RUNS
-    trades_manual_out = manual.testPolicy(symbol=symbol, sd=sd_out, ed=ed_out, sv=sv)
-    portvals_manual_out = msc.compute_portvals(
-        trades_manual_out, symbol, start_val=sv, commission=commission, impact=impact
-    )
-
-    trades_learner_out = learner.testPolicy(symbol=symbol, sd=sd_out, ed=ed_out, sv=sv)
-    portvals_learner_out = msc.compute_portvals(
-        trades_learner_out, symbol, start_val=sv, commission=commission, impact=impact
-    )
-
-    portvals_bench_out = run_benchmark(
-        symbol, sd_out, ed_out, sv=sv, commission=commission, impact=impact
-    )
-
-    # summarize out of sample
-    summarize("Out of sample Benchmark", portvals_bench_out)
-    summarize("Out of sample ManualStrategy", portvals_manual_out)
-    summarize("Out of sample StrategyLearner", portvals_learner_out)
-
-    # plot out of sample
-    plt.figure(figsize=(10, 6))
-    norm_bench_out = normalize(portvals_bench_out)
-    norm_manual_out = normalize(portvals_manual_out)
-    norm_learner_out = normalize(portvals_learner_out)
-
-    plt.plot(norm_bench_out.index, norm_bench_out.values, color="purple", label="Benchmark")
-    plt.plot(norm_manual_out.index, norm_manual_out.values, color="red", label="ManualStrategy")
-    plt.plot(norm_learner_out.index, norm_learner_out.values, color="blue", label="StrategyLearner")
-
-    plt.title("Out of sample JPM portfolio values")
-    plt.xlabel("Date")
-    plt.ylabel("Normalized value")
-    plt.legend()
-    plt.grid(True)
-    plt.savefig("./images/experiment1_out_of_sample.png", dpi=150)
+def _plot(manual_norm, learner_norm, bench_norm, label, symbol):
+    fig, ax = plt.subplots(figsize=(12, 6))
+    ax.plot(manual_norm.index, manual_norm.values, label="Manual Strategy", color="red")
+    ax.plot(learner_norm.index, learner_norm.values, label="Strategy Learner", color="green")
+    ax.plot(bench_norm.index, bench_norm.values, label="Benchmark", color="purple")
+    ax.set_title(f"Experiment 1: {label} ({symbol})")
+    ax.set_xlabel("Date")
+    ax.set_ylabel("Normalized Portfolio Value")
+    ax.legend(loc="best")
+    ax.grid(True)
+    fig.tight_layout()
+    fname = f"images/experiment1_{label.lower().replace(' ', '_')}.png"
+    fig.savefig(fname)
+    plt.close(fig)
 
 
+def run_experiment1(symbol="JPM", sv=100000, impact=0.005, commission=9.95):
+    os.makedirs("images", exist_ok=True)
+
+    in_sd, in_ed = dt.datetime(2008, 1, 1), dt.datetime(2009, 12, 31)
+    out_sd, out_ed = dt.datetime(2010, 1, 1), dt.datetime(2011, 12, 31)
+
+    manual_in = ms_strategy.ManualStrategy(impact=impact, commission=commission)
+    manual_in.testPolicy(symbol=symbol, sd=in_sd, ed=in_ed, sv=sv)
+    manual_in_portvals, _ = manual_in.get_port_val()
+
+    manual_out = ms_strategy.ManualStrategy(impact=impact, commission=commission)
+    manual_out.testPolicy(symbol=symbol, sd=out_sd, ed=out_ed, sv=sv)
+    manual_out_portvals, _ = manual_out.get_port_val()
+
+    learner = sl.StrategyLearner(verbose=False, impact=impact, commission=commission)
+    learner.add_evidence(symbol=symbol, sd=in_sd, ed=in_ed, sv=sv)
+
+    learner.testPolicy(symbol=symbol, sd=in_sd, ed=in_ed, sv=sv)
+    learner_in_portvals, _ = learner.get_port_val()
+
+    learner.testPolicy(symbol=symbol, sd=out_sd, ed=out_ed, sv=sv)
+    learner_out_portvals, _ = learner.get_port_val()
+
+    bench_in = _benchmark_portvals(symbol, in_sd, in_ed, sv, commission, impact)
+    bench_out = _benchmark_portvals(symbol, out_sd, out_ed, sv, commission, impact)
+
+    _plot(_normalize(manual_in_portvals), _normalize(learner_in_portvals),
+          _normalize(bench_in), "In Sample", symbol)
+    _plot(_normalize(manual_out_portvals), _normalize(learner_out_portvals),
+          _normalize(bench_out), "Out of Sample", symbol)
+
+    rows = {}
+    for label, pv in [("Manual In", manual_in_portvals), ("Learner In", learner_in_portvals),
+                       ("Benchmark In", bench_in), ("Manual Out", manual_out_portvals),
+                       ("Learner Out", learner_out_portvals), ("Benchmark Out", bench_out)]:
+        cr, adr, sddr, sr = msc.calculate_statistic_metrics(pv)
+        rows[label] = {"cum_return": cr, "mean_daily_return": adr, "stdev_daily_return": sddr}
+
+    summary = pd.DataFrame(rows).T.round(6)
+    summary.to_csv("p8_experiment1_summary.csv")
+    return summary
+
+
+def main(symbol="JPM", sv=100000, impact=0.005, commission=9.95):
+    return run_experiment1(symbol=symbol, sv=sv, impact=impact, commission=commission)
 
 
 if __name__ == "__main__":
-    main()
+    print(main())

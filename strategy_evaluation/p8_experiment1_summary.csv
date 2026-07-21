@@ -1,0 +1,7 @@
+,cum_return,mean_daily_return,stdev_daily_return
+Manual In,0.291908,0.000596,0.013302
+Learner In,0.864998,0.001308,0.011933
+Benchmark In,0.012325,0.000169,0.017041
+Manual Out,0.161381,0.000326,0.00752
+Learner Out,0.4718,0.00079,0.006545
+Benchmark Out,-0.083579,-0.000137,0.0085
