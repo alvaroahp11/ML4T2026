@@ -55,7 +55,7 @@ def run_experiment2(symbol="JPM", sv=100000, commission=0.0,
     bench_cr = _benchmark_cr(symbol, sd, ed, sv, commission, impact_values[0])
 
     fig1, ax1 = plt.subplots(figsize=(10, 6))
-    ax1.plot(results["impact"], results["cumulative_return"], marker="o", color="darkorange",
+    ax1.plot(results["impact"], results["cumulative_return"], marker="o", color="blue",
              label="Strategy Learner")
     ax1.set_xlabel("Impact")
     ax1.set_ylabel("Cumulative Return")
@@ -67,7 +67,7 @@ def run_experiment2(symbol="JPM", sv=100000, commission=0.0,
     plt.close(fig1)
 
     fig2, ax2 = plt.subplots(figsize=(10, 6))
-    ax2.plot(results["impact"], results["num_trades"], marker="o", color="teal",
+    ax2.plot(results["impact"], results["num_trades"], marker="o", color="green",
              label="Strategy Learner")
     ax2.set_xlabel("Impact")
     ax2.set_ylabel("Number of Trades")
